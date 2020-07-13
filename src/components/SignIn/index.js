@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { SignUpLink } from '../SignUp';
+import { PasswordForgetLink } from '../PasswordForget';
 import { FirebaseContext } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 
@@ -10,6 +11,7 @@ const SignInPage = () => {
       <FirebaseContext.Consumer>
         {(firebase) => <SignInForm firebase={firebase} />}
       </FirebaseContext.Consumer>
+      <PasswordForgetLink />
       <SignUpLink />
     </div>
   );
