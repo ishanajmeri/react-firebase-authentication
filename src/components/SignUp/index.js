@@ -1,102 +1,132 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { FirebaseContext } from '../Firebase';
-import * as ROUTES from '../../constants/routes';
+import { Form, Input, Button, Alert, Card } from 'antd';
 
 const SignUpPage = () => {
   return (
-    <div>
+    <Card>
       <h1>SignUp</h1>
       <FirebaseContext.Consumer>
         {(firebase) => <SignUpForm firebase={firebase} />}
       </FirebaseContext.Consumer>
-    </div>
+    </Card>
   );
 };
 
-const INITIAL_STATE = {
-  username: '',
-  email: '',
-  passwordOne: '',
-  passwordTwo: '',
-  error: null,
-};
-
 class SignUpForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { ...INITIAL_STATE };
-  }
-  onSubmit = (event) => {
-    const { username, email, passwordOne } = this.state;
+  state = {
+    error: '',
+  };
+  handleFinish = async (value) => {
+    const { username, email, password } = value;
+
     this.props.firebase
-      .doCreateUserWithEmailAndPassword(email, passwordOne)
+      .doCreateUserWithEmailAndPassword(email, password)
       .then((authUser) => {
-        return this.props.firebase
-          .user(authUser.user.uid)
-          .set({ username, email });
+        return this.props.firebase.user(authUser.user.uid).set({
+          username,
+          email,
+        });
       })
-      .then((authUser) => {
-        this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
+      .then(() => {
+        this.props.history.push('/home');
       })
       .catch((error) => {
+        console.log(error);
         this.setState({ error });
       });
-    event.preventDefault();
-  };
-  onChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
   };
   render() {
-    const { username, email, passwordOne, passwordTwo, error } = this.state;
-    const isInvalid =
-      passwordOne !== passwordTwo ||
-      passwordOne === '' ||
-      email === '' ||
-      username === '';
+    console.log(this.state.error);
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
+      <Form onFinish={this.handleFinish}>
+        {/* {this.state.error !== null ? (
+          <Form.Item>
+            <Alert message={this.state.error} type="error" showIcon />
+          </Form.Item>
+        ) : null} */}
+        <Form.Item
           name="username"
-          value={username}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Full Name"
-        />
-        <input
+          rules={[
+            {
+              required: true,
+              message: 'Please input your Username!',
+            },
+          ]}
+        >
+          <Input placeholder="Username" />
+        </Form.Item>
+        <Form.Item
           name="email"
-          value={email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
-          name="passwordOne"
-          value={passwordOne}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Password"
-        />
-        <input
-          name="passwordTwo"
-          value={passwordTwo}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Confirm Password"
-        />
-        <button disabled={isInvalid} type="submit">
-          Sign Up
-        </button>
-        {error && <p>{error.message}</p>}
-      </form>
+          rules={[
+            {
+              type: 'email',
+              message: 'The input is not valid E-mail!',
+            },
+            {
+              required: true,
+              message: 'Please input your E-mail!',
+            },
+          ]}
+        >
+          <Input placeholder="E-mail" />
+        </Form.Item>
+
+        <Form.Item
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your password!',
+            },
+            { min: 6, message: 'At least has 6 letters.' },
+          ]}
+          hasFeedback
+        >
+          <Input.Password placeholder="Password" />
+        </Form.Item>
+
+        <Form.Item
+          name="confirm"
+          dependencies={['password']}
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: 'Please confirm your password!',
+            },
+            { min: 6, message: 'At least has 6 letters.' },
+            ({ getFieldValue }) => ({
+              validator(rule, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  'The two passwords that you entered do not match!'
+                );
+              },
+            }),
+          ]}
+        >
+          <Input.Password
+            // prefix={<LockOutlined />}
+            placeholder="Confirm password"
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Register
+          </Button>
+        </Form.Item>
+      </Form>
     );
   }
 }
 
 const SignUpLink = () => (
   <p>
-    Don't have an account?<Link to={ROUTES.SIGN_UP}>Sign Up</Link>
+    Don't have an account?<Link to="/signup">Sign Up</Link>
   </p>
 );
 
