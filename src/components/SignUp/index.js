@@ -1,24 +1,26 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { FirebaseContext } from '../Firebase';
-import { Form, Input, Button, Alert, Card } from 'antd';
+import { withFirebase } from '../Firebase';
+import { Form, Input, Button, Alert, Card, Row } from 'antd';
 
 const SignUpPage = () => {
   return (
     <Card>
-      <h1>SignUp</h1>
-      <FirebaseContext.Consumer>
-        {(firebase) => <SignUpForm firebase={firebase} />}
-      </FirebaseContext.Consumer>
+      <Row justify="center">
+        <h1>SignUp</h1>
+      </Row>
+      <Row justify="center">
+        <SignUpForm />
+      </Row>
     </Card>
   );
 };
 
-class SignUpForm extends Component {
+class SignUpFormBase extends Component {
   state = {
-    error: '',
+    error: null,
   };
-  handleFinish = async (value) => {
+  handleFinish = (value) => {
     const { username, email, password } = value;
 
     this.props.firebase
@@ -33,19 +35,18 @@ class SignUpForm extends Component {
         this.props.history.push('/home');
       })
       .catch((error) => {
-        console.log(error);
-        this.setState({ error });
+        this.setState({ error: error.code });
       });
   };
   render() {
     console.log(this.state.error);
     return (
       <Form onFinish={this.handleFinish}>
-        {/* {this.state.error !== null ? (
+        {this.state.error !== null ? (
           <Form.Item>
             <Alert message={this.state.error} type="error" showIcon />
           </Form.Item>
-        ) : null} */}
+        ) : null}
         <Form.Item
           name="username"
           rules={[
@@ -130,6 +131,7 @@ const SignUpLink = () => (
   </p>
 );
 
+const SignUpForm = withFirebase(SignUpFormBase);
 export default SignUpPage;
 
 export { SignUpForm, SignUpLink };
