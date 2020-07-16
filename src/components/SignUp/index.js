@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { withFirebase } from '../Firebase';
 import { Form, Input, Button, Alert, Card, Row } from 'antd';
+import { withRouter } from 'react-router-dom';
+import { compose } from 'recompose';
 
 const SignUpPage = () => {
   return (
@@ -39,7 +40,6 @@ class SignUpFormBase extends Component {
       });
   };
   render() {
-    console.log(this.state.error);
     return (
       <Form onFinish={this.handleFinish}>
         {this.state.error !== null ? (
@@ -125,13 +125,7 @@ class SignUpFormBase extends Component {
   }
 }
 
-const SignUpLink = () => (
-  <p>
-    Don't have an account?<Link to="/signup">Sign Up</Link>
-  </p>
-);
-
-const SignUpForm = withFirebase(SignUpFormBase);
+const SignUpForm = compose(withRouter, withFirebase)(SignUpFormBase);
 export default SignUpPage;
 
-export { SignUpForm, SignUpLink };
+export { SignUpForm };

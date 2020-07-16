@@ -1,76 +1,89 @@
 import React, { Component } from 'react';
-import { SignUpLink } from '../SignUp';
 import { PasswordForgetLink } from '../PasswordForget';
-import { FirebaseContext } from '../Firebase';
-import * as ROUTES from '../../constants/routes';
+import { withFirebase } from '../Firebase';
+import { Link, withRouter } from 'react-router-dom';
+import { Form, Input, Button, Alert, Card, Row } from 'antd';
+import { compose } from 'recompose';
 
 const SignInPage = () => {
   return (
-    <div>
-      <h1>SignIn</h1>
-      <FirebaseContext.Consumer>
-        {(firebase) => <SignInForm firebase={firebase} />}
-      </FirebaseContext.Consumer>
-      <PasswordForgetLink />
-      <SignUpLink />
-    </div>
+    <Row justify="center">
+      <Card>
+        <h1>SignIn</h1>
+        <SignInForm />
+        <PasswordForgetLink />
+        <SignUpLink />
+      </Card>
+    </Row>
   );
 };
 
-const INITIAL_STATE = {
-  email: '',
-  password: '',
-  error: null,
-};
-
-class SignInForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { ...INITIAL_STATE };
-  }
-  onSubmit = (event) => {
-    const { email, password } = this.state;
+class SignInFormBase extends Component {
+  state = {
+    error: null,
+  };
+  onSubmit = (value) => {
+    const { email, password } = value;
     this.props.firebase
       .doSignInWithEmailAndPassword(email, password)
-      .then((authUser) => {
-        this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
+      .then(() => {
+        this.props.history.push('/');
       })
       .catch((error) => {
-        this.setState({ error });
+        this.setState({ error: error.code });
       });
-    event.preventDefault();
-  };
-  onChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
   };
   render() {
-    const { email, password, error } = this.state;
-    const isInvalid = password === '' || email === '';
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
+      <Form onFinish={this.onSubmit}>
+        {this.state.error !== null ? (
+          <Form.Item>
+            <Alert message={this.state.error} type="error" showIcon />
+          </Form.Item>
+        ) : null}
+        <Form.Item
           name="email"
-          value={email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
+          rules={[
+            {
+              type: 'email',
+              message: 'The input is not valid E-mail!',
+            },
+            {
+              required: true,
+              message: 'Please input your E-mail!',
+            },
+          ]}
+        >
+          <Input placeholder="E-mail" />
+        </Form.Item>
+        <Form.Item
           name="password"
-          value={password}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Password"
-        />
-        <button disabled={isInvalid} type="submit">
-          Sign In
-        </button>
-        {error && <p>{error.message}</p>}
-      </form>
+          rules={[
+            {
+              required: true,
+              message: 'Please input your password!',
+            },
+            { min: 6, message: 'At least has 6 letters.' },
+          ]}
+          hasFeedback
+        >
+          <Input.Password placeholder="Password" />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Register
+          </Button>
+        </Form.Item>
+      </Form>
     );
   }
 }
 
+const SignInForm = compose(withRouter, withFirebase)(SignInFormBase);
+
+const SignUpLink = () => (
+  <p>
+    Don't have an account?<Link to="/signup">Sign Up</Link>
+  </p>
+);
 export default SignInPage;
-export { SignInForm };
