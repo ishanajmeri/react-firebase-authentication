@@ -3,18 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './app';
 import * as serviceWorker from './serviceWorker';
-// import Firebase, { FirebaseContext } from './components/Firebase';
+import Firebase, { FirebaseContext } from './services/firebase';
 import { BrowserRouter } from 'react-router-dom';
 import 'antd/dist/antd.css';
 
 ReactDOM.render(
-  // <React.StrictMode>
-  // <FirebaseContext.Provider value={new Firebase()}>
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  // </FirebaseContext.Provider>,
-  // </React.StrictMode>
+  <FirebaseContext.Provider value={new Firebase()}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </FirebaseContext.Provider>,
   document.getElementById('root')
 );
 

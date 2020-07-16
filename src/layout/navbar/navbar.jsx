@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { NavLink, Link } from 'react-router-dom';
-import { Row, Col, Layout, Button, Typography } from 'antd';
+import { NavLink } from 'react-router-dom';
+import { Row, Col, Layout, Button } from 'antd';
 
 class Navbar extends Component {
   render() {
@@ -17,19 +17,19 @@ class Navbar extends Component {
           </Col>
           <Col>
             <Button type="link">
-              <NavLink to="/">Landing</NavLink>
+              <NavLink to="/main">Landing</NavLink>
             </Button>
             <Button type="link">
-              <NavLink to="/">Account</NavLink>
+              <NavLink to="/account">Account</NavLink>
             </Button>
             <Button type="link">
-              <NavLink to="/">Admin</NavLink>
+              <NavLink to="/admin">Admin</NavLink>
             </Button>
             <Button type="link">
-              <NavLink to="/">signIn</NavLink>
+              <NavLink to="/signin">signIn</NavLink>
             </Button>
             <Button type="link">
-              <NavLink to="/">SignUp</NavLink>
+              <NavLink to="/signup">SignUp</NavLink>
             </Button>
           </Col>
         </Row>
