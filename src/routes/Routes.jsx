@@ -4,6 +4,7 @@ import RouteWithLayout from './routeWithLayouts';
 import MainLayout from '../layout/layout';
 import Home from '../views/home/home';
 import Main from '../views/main/main';
+import SignUp from '../views/auth/signup';
 
 const Routes = (props) => {
   return (
@@ -21,6 +22,13 @@ const Routes = (props) => {
         layout={MainLayout}
         auth={props.auth}
         path="/"
+      />
+      <RouteWithLayout
+        component={SignUp}
+        exact
+        layout={MainLayout}
+        auth={props.auth}
+        path="/signup"
       />
     </Switch>
   );

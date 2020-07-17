@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import AuthUserContext from './context';
 import { withRouter } from 'react-router-dom';
 import { withFirebase } from '../firebase/context';
@@ -19,6 +19,7 @@ const withAuthorization = (condition) => (Component) => {
       this.listener();
     }
     render() {
+      console.log('withauthorization');
       return (
         <AuthUserContext.Consumer>
           {(authUser) =>

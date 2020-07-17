@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import Routes from './routes/Routes';
-import withAuthentication from './services/auth/withAuthentication';
+import { withAuthentication } from './services/auth';
 
 class App extends Component {
   state = {};
   render() {
-    return <Routes />;
+    return (
+      <div>
+        <Routes />
+      </div>
+    );
   }
 }
 

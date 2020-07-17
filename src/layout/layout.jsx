@@ -6,7 +6,7 @@ const MainLayout = (props) => {
   return (
     <div>
       <Layout>
-        <Navbar auth={props.auth} />
+        <Navbar />
         <main>
           {/* {childern} */}
           {props.children}
