@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Row, Col, Layout, Button } from 'antd';
 import { AuthUserContext } from '../../services/auth';
-import FirebaseContext from '../../services/firebase';
+import SignOutButton from './signout';
 class Navbar extends Component {
   render() {
     return (
       <Layout.Header>
         <Row>
           <Col>
-            <NavLink to="/main">
+            <NavLink to="/">
               <img src="favicon.ico" alt="" style={{ height: '30%' }} />
             </NavLink>
             <Button type="link">
-              <NavLink to="/main">Landing</NavLink>
+              <NavLink to="/">Landing</NavLink>
             </Button>
           </Col>
           <Col>
@@ -44,13 +44,7 @@ const NavigationAuth = ({ authUser }) => {
           <NavLink to="/admin">Admin</NavLink>
         </Button>
       )}
-      <FirebaseContext.Consumer>
-        {(firebase) => (
-          <Button type="primary" onClick={firebase.doSignOut}>
-            Sign Out
-          </Button>
-        )}
-      </FirebaseContext.Consumer>
+      <SignOutButton />
     </div>
   );
 };
