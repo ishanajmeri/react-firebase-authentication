@@ -13,13 +13,12 @@ class Navbar extends Component {
               <img src="favicon.ico" alt="" style={{ height: '30%' }} />
             </NavLink>
             <Button type="link">
-              <NavLink to="/">Landing</NavLink>
+              <NavLink to="/">Main</NavLink>
             </Button>
           </Col>
           <Col>
             <AuthUserContext.Consumer>
               {(authUser) => {
-                console.log(authUser, 'navbar');
                 return authUser ? (
                   <NavigationAuth authUser={authUser} />
                 ) : (
@@ -36,6 +35,9 @@ class Navbar extends Component {
 const NavigationAuth = ({ authUser }) => {
   return (
     <div>
+      <Button type="link">
+        <NavLink to="/home">Home</NavLink>
+      </Button>
       <Button type="link">
         <NavLink to="/account">Account</NavLink>
       </Button>
