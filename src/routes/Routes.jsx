@@ -6,6 +6,7 @@ import Home from '../views/home/home';
 import Main from '../views/main/main';
 import SignUp from '../views/auth/signup';
 import SignIn from '../views/auth/signin';
+import Account from '../views/account/account';
 
 const Routes = (props) => {
   return (
@@ -14,29 +15,26 @@ const Routes = (props) => {
         component={Home}
         exact
         layout={MainLayout}
-        auth={props.auth}
         path="/home"
       />
-      <RouteWithLayout
-        component={Main}
-        exact
-        layout={MainLayout}
-        auth={props.auth}
-        path="/"
-      />
+      <RouteWithLayout component={Main} exact layout={MainLayout} path="/" />
       <RouteWithLayout
         component={SignUp}
         exact
         layout={MainLayout}
-        auth={props.auth}
         path="/signup"
       />
       <RouteWithLayout
         component={SignIn}
         exact
         layout={MainLayout}
-        auth={props.auth}
         path="/signin"
+      />
+      <RouteWithLayout
+        component={Account}
+        exact
+        layout={MainLayout}
+        path="/account"
       />
     </Switch>
   );
