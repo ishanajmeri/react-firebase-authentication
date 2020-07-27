@@ -31,10 +31,6 @@ const SIGN_IN_METHODS = [
     id: 'facebook.com',
     provider: 'facebookProvider',
   },
-  {
-    id: 'twitter.com',
-    provider: 'twitterProvider',
-  },
 ];
 class LoginManagementBase extends Component {
   state = { activeSignInMethods: [], error: null };

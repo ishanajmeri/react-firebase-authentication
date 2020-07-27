@@ -7,6 +7,7 @@ import Main from '../views/main/main';
 import SignUp from '../views/auth/signup';
 import SignIn from '../views/auth/signin';
 import Account from '../views/account/account';
+import ForgotPassword from '../views/auth/forgotPassword';
 
 const Routes = (props) => {
   return (
@@ -35,6 +36,12 @@ const Routes = (props) => {
         exact
         layout={MainLayout}
         path="/account"
+      />
+      <RouteWithLayout
+        component={ForgotPassword}
+        exact
+        layout={MainLayout}
+        path="/forgotpassword"
       />
     </Switch>
   );
