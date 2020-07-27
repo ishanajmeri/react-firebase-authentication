@@ -3,6 +3,7 @@ import { AuthUserContext } from '../../services/auth';
 import { withFirebase } from '../../services/firebase';
 import { Card, Row } from 'antd';
 import DefaultLoginToggle from './components/defaultLoginToggle';
+import SocialLoginToggle from './components/socialLoginToggle';
 
 const Account = () => {
   return (
@@ -59,7 +60,18 @@ class LoginManagementBase extends Component {
     this.props.firebase.auth.currentUser
       .linkAndRetrieveDataWithCredential(credential)
       .then(this.fetchSignInMethods)
-      .catch((error) => this.setState({ error }));
+      .catch((error) =>
+        this.setState({ error }, console.log(error, 'ondefault'))
+      );
+  };
+
+  onSocialLoginLink = (provider) => {
+    this.props.firebase.auth.currentUser
+      .linkWithPopup(this.props.firebase[provider])
+      .then(this.fetchSignInMethods)
+      .catch((error) =>
+        this.setState({ error }, console.log(error, 'onsocial'))
+      );
   };
 
   onUnlink = (providerId) => {
@@ -73,14 +85,13 @@ class LoginManagementBase extends Component {
     return (
       <Card>
         <Row justify="center">Sign In methods:</Row>
-        <Row justify="center">
-          {SIGN_IN_METHODS.map((signInMethod) => {
-            const onlyOneLeft = activeSignInMethods.length === 1;
-            const isEnabled = activeSignInMethods.includes(signInMethod.id);
-            console.log(isEnabled, 'accout');
-            return (
-              <Row key={signInMethod.id}>
-                {signInMethod.id === 'password' ? (
+        {SIGN_IN_METHODS.map((signInMethod) => {
+          const onlyOneLeft = activeSignInMethods.length === 1;
+          const isEnabled = activeSignInMethods.includes(signInMethod.id);
+          return (
+            <div key={signInMethod.id}>
+              {signInMethod.id === 'password' ? (
+                <Row justify="center">
                   <DefaultLoginToggle
                     onlyOneLeft={onlyOneLeft}
                     isEnabled={isEnabled}
@@ -88,13 +99,22 @@ class LoginManagementBase extends Component {
                     onLink={this.onDefaultLoginLink}
                     onUnlink={this.onUnlink}
                   />
-                ) : // <SocialLoginToggle />
-                null}
-              </Row>
-            );
-          })}
-          {error && error.message}
-        </Row>
+                </Row>
+              ) : (
+                <Row style={{ paddingTop: '2%' }} justify="center">
+                  <SocialLoginToggle
+                    onlyOneLeft={onlyOneLeft}
+                    isEnabled={isEnabled}
+                    signInMethod={signInMethod}
+                    onLink={this.onSocialLoginLink}
+                    onUnlink={this.onUnlink}
+                  />
+                </Row>
+              )}
+            </div>
+          );
+        })}
+        {error && error.message}
       </Card>
     );
   }
