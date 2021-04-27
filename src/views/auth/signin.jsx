@@ -90,17 +90,6 @@ class SignIn extends Component {
                       </Form.Item>
                     </Form>
                     <br />
-                    <Button size="medium" block type="default">
-                      <GoogleOutlined />
-                      Login with Google
-                    </Button>
-                    <Row>
-                      <Col lg={0} md={0} sm={24} xs={24}>
-                        <br />
-                        <span style={{ color: 'grey' }}>Already have an Account ?</span>
-                        &nbsp;<a href="/">Login</a>
-                      </Col>
-                    </Row>
                   </Col>
                 </Row>
               </Col>
