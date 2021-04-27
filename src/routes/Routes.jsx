@@ -15,48 +15,13 @@ const Routes = () => {
   return (
     <Switch>
       <RouteWithLayout component={Main} exact layout={MainLayout} path="/" />
-      <RouteWithLayout
-        component={Home}
-        exact
-        layout={MainLayout}
-        path="/home"
-      />
-      <RouteWithLayout
-        component={Admin}
-        exact
-        layout={MainLayout}
-        path="/admin"
-      />
-      <RouteWithLayout
-        component={UserItem}
-        exact
-        layout={MainLayout}
-        path="/admin/:id"
-      />
-      <RouteWithLayout
-        component={SignUp}
-        exact
-        layout={MainLayout}
-        path="/signup"
-      />
-      <RouteWithLayout
-        component={SignIn}
-        exact
-        layout={MainLayout}
-        path="/signin"
-      />
-      <RouteWithLayout
-        component={Account}
-        exact
-        layout={MainLayout}
-        path="/account"
-      />
-      <RouteWithLayout
-        component={ForgotPassword}
-        exact
-        layout={MainLayout}
-        path="/forgotpassword"
-      />
+      <RouteWithLayout component={Home} exact layout={MainLayout} path="/home" />
+      <RouteWithLayout component={Admin} exact layout={MainLayout} path="/admin" />
+      <RouteWithLayout component={UserItem} exact layout={MainLayout} path="/admin/:id" />
+      <RouteWithLayout component={SignUp} exact layout={MainLayout} path="/signup" />
+      <RouteWithLayout component={SignIn} exact layout={MainLayout} path="/signin" navbar={false} />
+      <RouteWithLayout component={Account} exact layout={MainLayout} path="/account" />
+      <RouteWithLayout component={ForgotPassword} exact layout={MainLayout} path="/forgotpassword" />
     </Switch>
   );
 };
