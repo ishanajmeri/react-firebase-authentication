@@ -18,12 +18,9 @@ class Navbar extends Component {
           </Col>
           <Col>
             <AuthUserContext.Consumer>
-              {(authUser) => {
-                return authUser ? (
-                  <NavigationAuth authUser={authUser} />
-                ) : (
-                  <NavigationNonauth />
-                );
+              {authUser => {
+                console.log(authUser);
+                return authUser ? <NavigationAuth authUser={authUser} /> : <NavigationNonauth />;
               }}
             </AuthUserContext.Consumer>
           </Col>
@@ -36,16 +33,16 @@ const NavigationAuth = ({ authUser }) => {
   return (
     <div>
       <Button type="link">
-        <NavLink to="/home">Home</NavLink>
+        <NavLink to="/home">{authUser.username}</NavLink>
       </Button>
-      <Button type="link">
+      {/* <Button type="link">
         <NavLink to="/account">Account</NavLink>
-      </Button>
-      {!!authUser.roles['ADMIN'] && (
+      </Button> */}
+      {/* {!!authUser.roles['ADMIN'] && (
         <Button type="link">
           <NavLink to="/admin">Admin</NavLink>
         </Button>
-      )}
+      )} */}
       <SignOutButton />
     </div>
   );

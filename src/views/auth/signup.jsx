@@ -26,7 +26,7 @@ class SignUp extends Component {
       .then(() => {
         return this.props.firebase.doSendEmailVerification();
       })
-      .then(() => this.props.history.push('/home'))
+      .then(() => this.props.history.push('/'))
       .catch(error => {
         console.log(error);
         this.setState({ error: error.code });
