@@ -12,7 +12,6 @@ const config = {
   appId: process.env.REACT_APP_APP_ID,
   measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
-
 class Firebase {
   constructor() {
     app.initializeApp(config);
@@ -36,11 +35,9 @@ class Firebase {
 
   // *** Auth API ***
 
-  doCreateUserWithEmailAndPassword = (email, password) =>
-    this.auth.createUserWithEmailAndPassword(email, password);
+  doCreateUserWithEmailAndPassword = (email, password) => this.auth.createUserWithEmailAndPassword(email, password);
 
-  doSignInWithEmailAndPassword = (email, password) =>
-    this.auth.signInWithEmailAndPassword(email, password);
+  doSignInWithEmailAndPassword = (email, password) => this.auth.signInWithEmailAndPassword(email, password);
 
   doSignInWithGoogle = () => this.auth.signInWithPopup(this.googleProvider);
 
@@ -50,24 +47,23 @@ class Firebase {
 
   doSignOut = () => this.auth.signOut();
 
-  doPasswordReset = (email) => this.auth.sendPasswordResetEmail(email);
+  doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
 
   doSendEmailVerification = () =>
     this.auth.currentUser.sendEmailVerification({
       url: 'http://localhost:3000',
     });
 
-  doPasswordUpdate = (password) =>
-    this.auth.currentUser.updatePassword(password);
+  doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
 
   // *** Merge Auth and DB User API *** //
 
   onAuthUserListener = (next, fallback) =>
-    this.auth.onAuthStateChanged((authUser) => {
+    this.auth.onAuthStateChanged(authUser => {
       if (authUser) {
         this.user(authUser.uid)
           .once('value')
-          .then((snapshot) => {
+          .then(snapshot => {
             const dbUser = snapshot.val();
 
             // default empty roles
@@ -93,15 +89,15 @@ class Firebase {
 
   // *** User API ***
 
-  user = (uid) => this.db.ref(`users/${uid}`);
+  user = uid => this.db.ref(`users/${uid}`);
 
   users = () => this.db.ref('users');
 
   // *** Message API ***
 
-  message = (uid) => this.db.ref(`messages/${uid}`);
+  // message = (uid) => this.db.ref(`messages/${uid}`);
 
-  messages = () => this.db.ref('messages');
+  // messages = () => this.db.ref('messages');
 }
 
 export default Firebase;

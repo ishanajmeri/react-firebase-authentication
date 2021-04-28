@@ -41,7 +41,7 @@ class SignIn extends Component {
                         <h3 style={{ fontWeight: 'bold' }}>Logo</h3>
                       </Col>
                     </Row>
-                    <h2 style={{ fontWeight: 'bold' }}>Create Account</h2>
+                    <h2 style={{ fontWeight: 'bold' }}>Login Account</h2>
                     <Form onFinish={this.handleFinish}>
                       {this.state.error !== '' ? (
                         <Form.Item>
