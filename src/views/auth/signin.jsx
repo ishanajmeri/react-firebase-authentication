@@ -1,24 +1,32 @@
 import React, { Component } from 'react';
-import { Card, Form, Input, Row, Typography, Button, Alert, Col } from 'antd';
-import { LockOutlined, MailOutlined, LoginOutlined, GoogleOutlined } from '@ant-design/icons';
+import { Card, Form, Input, Row, Button, Alert, Col } from 'antd';
+import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { withFirebase } from '../../services/firebase';
 
 class SignIn extends Component {
   state = { error: '' };
-
   handleFinish = values => {
     const { email, password } = values;
 
     this.props.firebase
       .doSignInWithEmailAndPassword(email, password)
-      .then(() => this.props.history.push('/home'))
+      .then(() => {
+        if (!this.props.firebase.auth.currentUser.emailVerified) {
+          console.log(this.props.firebase.auth.currentUser.emailVerified);
+          this.props.firebase.doSignOut();
+          this.setState({ error: "you havn't verify your email address" });
+        } else {
+          this.props.history.push('/home');
+        }
+      })
       .catch(error => {
         console.log(error);
         this.setState({ error: error.code });
       });
   };
   render() {
+    console.log(this.props.firebase);
     return (
       <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
         <Col span={14}>

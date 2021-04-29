@@ -19,7 +19,6 @@ class Navbar extends Component {
           <Col>
             <AuthUserContext.Consumer>
               {authUser => {
-                console.log(authUser);
                 return authUser ? <NavigationAuth authUser={authUser} /> : <NavigationNonauth />;
               }}
             </AuthUserContext.Consumer>
