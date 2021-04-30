@@ -14,10 +14,14 @@ const ForgotPassword = () => {
 class ForgotPasswordBase extends Component {
   state = { error: '' };
 
-  handleFinish = (value) => {
+  handleFinish = value => {
     this.props.firebase
-      .doPasswordRest(value.email)
-      .catch((error) => this.setState({ error }));
+      .doPasswordReset(value.email)
+      .then(() => {
+        this.props.firebase.doSignOut();
+        this.props.history.push('/home');
+      })
+      .catch(error => this.setState({ error }));
   };
 
   render() {

@@ -24,7 +24,8 @@ class SignUp extends Component {
         });
       })
       .then(() => {
-        return this.props.firebase.doSendEmailVerification();
+        this.props.firebase.doSendEmailVerification();
+        this.props.firebase.doSignOut();
       })
       .then(() => this.props.history.push('/'))
       .catch(error => {
