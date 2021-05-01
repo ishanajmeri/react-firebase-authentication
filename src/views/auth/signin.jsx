@@ -4,33 +4,52 @@ import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { withFirebase } from '../../services/firebase';
 
-class SignIn extends Component {
-  state = { error: '' };
-  handleFinish = values => {
+const SignIn = props => {
+  const { firebase, history } = props;
+  console.log(props);
+  const [error, setError] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    setLoading(false);
+    if (firebase.auth.currentUser && firebase.auth.currentUser.emailVerified) {
+      history.push('/home');
+    } else {
+      setLoading(true);
+    }
+  }, [firebase.auth.currentUser, history]);
+
+  const handleFinish = values => {
     const { email, password } = values;
 
-    this.props.firebase
+    props.firebase
       .doSignInWithEmailAndPassword(email, password)
       .then(() => {
-        if (!this.props.firebase.auth.currentUser.emailVerified) {
-          console.log(this.props.firebase.auth.currentUser.emailVerified);
-          this.props.firebase.doSignOut();
-          this.setState({ error: "you havn't verify your email address" });
+        if (!props.firebase.auth.currentUser.emailVerified) {
+          console.log(props.firebase.auth.currentUser.emailVerified);
+          props.firebase.doSignOut();
+          setError("you havn't verify your email address");
         } else {
-          this.props.history.push('/home');
+          props.history.push('/home');
         }
       })
       .catch(error => {
         console.log(error);
-        this.setState({ error: error.code });
+        setError(error.code);
       });
   };
-  render() {
-    console.log(this.props.firebase);
-    return (
-      <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
-        <Col span={14}>
-          <br />
+  // if (props.firebase.auth.currentUser && props.firebase.auth.currentUser.emailVerified) {
+  //   props.history.push('/home');
+  //   console.log(props.firebase.auth.currentUser);
+  // } else {
+  //   setLoading(true);
+  // }
+  // console.log(loading);
+  return (
+    <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
+      <Col span={14}>
+        <br />
+        {loading && firebase && (
           <Card bodyStyle={{ padding: '0' }} style={{ boxShadow: '0px 4px 20px 10px rgba(84, 84, 84, 0.1)' }}>
             <Row /* justify="center" */ align="middle" gutter={48}>
               <Col lg={12} md={12} sm={0} xs={0} style={{ overflow: 'hidden' }}>
@@ -50,10 +69,10 @@ class SignIn extends Component {
                       </Col>
                     </Row>
                     <h2 style={{ fontWeight: 'bold' }}>Login Account</h2>
-                    <Form onFinish={this.handleFinish}>
-                      {this.state.error !== '' ? (
+                    <Form onFinish={handleFinish}>
+                      {error !== '' ? (
                         <Form.Item>
-                          <Alert message={this.state.error} type="error" showIcon />
+                          <Alert message={error} type="error" showIcon />
                         </Form.Item>
                       ) : null}
                       <Form.Item
@@ -103,10 +122,10 @@ class SignIn extends Component {
               </Col>
             </Row>
           </Card>
-        </Col>
-      </Row>
-    );
-  }
-}
+        )}
+      </Col>
+    </Row>
+  );
+};
 
 export default withFirebase(SignIn);

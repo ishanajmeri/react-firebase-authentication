@@ -4,40 +4,51 @@ import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { withFirebase } from '../../services/firebase';
 
-class SignUp extends Component {
-  state = { error: '' };
+const SignUp = props => {
+  const { firebase, history } = props;
 
-  handleFinish = values => {
+  React.useEffect(() => {
+    setLoading(false);
+    if (firebase.auth.currentUser && firebase.auth.currentUser.emailVerified) {
+      history.push('/home');
+    } else {
+      setLoading(true);
+    }
+  }, [firebase.auth.currentUser, history]);
+  const [error, setError] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+  const handleFinish = values => {
     const { username, email, password, isAdmin } = values;
     const roles = {};
     if (isAdmin !== undefined) {
       roles['ADMIN'] = 'ADMIN';
     }
 
-    this.props.firebase
+    props.firebase
       .doCreateUserWithEmailAndPassword(email, password)
       .then(authUser => {
-        return this.props.firebase.user(authUser.user.uid).set({
+        return props.firebase.user(authUser.user.uid).set({
           username,
           email,
           roles,
         });
       })
       .then(() => {
-        this.props.firebase.doSendEmailVerification();
-        this.props.firebase.doSignOut();
+        props.firebase.doSendEmailVerification();
+
+        props.firebase.doSignOut();
       })
-      .then(() => this.props.history.push('/'))
+      .then(() => props.history.push('/'))
       .catch(error => {
         console.log(error);
-        this.setState({ error: error.code });
+        setError(error.code);
       });
   };
-  render() {
-    return (
-      <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
-        <Col span={14}>
-          <br />
+  return (
+    <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
+      <Col span={14}>
+        <br />
+        {loading && firebase && (
           <Card bodyStyle={{ padding: '0' }} style={{ boxShadow: '0px 4px 20px 10px rgba(84, 84, 84, 0.1)' }}>
             <Row /* justify="center" */ align="middle" gutter={48}>
               <Col lg={12} md={12} sm={0} xs={0} style={{ overflow: 'hidden' }}>
@@ -57,10 +68,10 @@ class SignUp extends Component {
                       </Col>
                     </Row>
                     <h2 style={{ fontWeight: 'bold' }}>Create Account</h2>
-                    <Form onFinish={this.handleFinish}>
-                      {this.state.error !== '' ? (
+                    <Form onFinish={handleFinish}>
+                      {error !== '' ? (
                         <Form.Item>
-                          <Alert message={this.state.error} type="error" showIcon />
+                          <Alert message={error} type="error" showIcon />
                         </Form.Item>
                       ) : null}
                       <Form.Item
@@ -148,10 +159,10 @@ class SignUp extends Component {
               </Col>
             </Row>
           </Card>
-        </Col>
-      </Row>
-    );
-  }
-}
+        )}
+      </Col>
+    </Row>
+  );
+};
 
 export default withFirebase(SignUp);
