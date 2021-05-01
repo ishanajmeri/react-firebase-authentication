@@ -37,6 +37,7 @@ const SignUp = props => {
         props.firebase.doSendEmailVerification();
 
         props.firebase.doSignOut();
+        window.localStorage.removeItem('exp');
       })
       .then(() => props.history.push('/'))
       .catch(error => {

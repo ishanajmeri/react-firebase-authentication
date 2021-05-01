@@ -6,7 +6,7 @@ import { withFirebase } from '../../services/firebase';
 
 const SignIn = props => {
   const { firebase, history } = props;
-  console.log(props);
+  // console.log(props);
   const [error, setError] = React.useState('');
   const [loading, setLoading] = React.useState(false);
 
@@ -28,8 +28,12 @@ const SignIn = props => {
         if (!props.firebase.auth.currentUser.emailVerified) {
           console.log(props.firebase.auth.currentUser.emailVerified);
           props.firebase.doSignOut();
+          window.localStorage.removeItem('exp');
           setError("you havn't verify your email address");
         } else {
+          const time = new Date(new Date().getTime() + 60000 * 2) - new Date();
+          window.localStorage.removeItem('exp');
+          window.localStorage.setItem('exp', time);
           props.history.push('/home');
         }
       })

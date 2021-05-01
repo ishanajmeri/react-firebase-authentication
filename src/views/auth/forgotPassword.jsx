@@ -20,6 +20,7 @@ class ForgotPasswordBase extends Component {
       .then(() => {
         this.props.firebase.doSignOut();
         this.props.history.push('/home');
+        window.localStorage.removeItem('exp');
       })
       .catch(error => this.setState({ error }));
   };

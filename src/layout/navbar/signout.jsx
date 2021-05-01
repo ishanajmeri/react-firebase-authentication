@@ -4,7 +4,13 @@ import { withFirebase } from '../../services/firebase';
 
 const SignOutButton = ({ firebase }) => {
   return (
-    <Button type="primary" onClick={firebase.doSignOut}>
+    <Button
+      type="primary"
+      onClick={() => {
+        firebase.doSignOut();
+        window.localStorage.removeItem('exp');
+      }}
+    >
       Sign Out
     </Button>
   );
