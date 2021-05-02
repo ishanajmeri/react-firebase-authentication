@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Card, Form, Input, Row, Button, Alert, Col } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
@@ -6,7 +6,6 @@ import { withFirebase } from '../../services/firebase';
 
 const SignIn = props => {
   const { firebase, history } = props;
-  // console.log(props);
   const [error, setError] = React.useState('');
   const [loading, setLoading] = React.useState(false);
 
@@ -42,13 +41,6 @@ const SignIn = props => {
         setError(error.code);
       });
   };
-  // if (props.firebase.auth.currentUser && props.firebase.auth.currentUser.emailVerified) {
-  //   props.history.push('/home');
-  //   console.log(props.firebase.auth.currentUser);
-  // } else {
-  //   setLoading(true);
-  // }
-  // console.log(loading);
   return (
     <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
       <Col span={14}>

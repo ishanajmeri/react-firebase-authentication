@@ -4,19 +4,22 @@ import Routes from './routes/Routes';
 
 const App = props => {
   const { firebase } = props;
-  React.useEffect(() => {
-    let exp;
-    if (typeof window !== 'undefined') {
-      exp = window.localStorage.getItem('exp');
-    }
-    console.log(exp);
-    // if (exp > new Date()) console.log('expired');
+  // React.useEffect(() => {
+  let exp;
+  if (typeof window !== 'undefined') {
+    exp = window.localStorage.getItem('exp');
+  }
+  console.log('exp', exp);
+  //   // if (exp > new Date()) console.log('expired');
+  if (exp) {
     setTimeout(() => {
       firebase.doSignOut();
-      // console.log('time');
+      console.log('time');
       window.localStorage.removeItem('exp');
     }, exp);
-  });
+  }
+
+  // });
   return (
     <div>
       <Routes />
