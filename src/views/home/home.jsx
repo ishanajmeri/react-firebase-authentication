@@ -4,7 +4,7 @@ import { withAuthorization } from '../../services/auth';
 import { DesktopOutlined } from '@ant-design/icons';
 
 const Home = props => {
-  console.log('home', props);
+  // console.log('home', props);
   return (
     <Card bordered={false}>
       <Row justify="center">

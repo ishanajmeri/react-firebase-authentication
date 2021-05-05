@@ -93,11 +93,11 @@ class Firebase {
 
   users = () => this.db.ref('users');
 
-  // *** Message API ***
+  // *** session API ***
 
-  // message = (uid) => this.db.ref(`messages/${uid}`);
+  session = uid => this.db.ref(`sessions/${uid}`);
 
-  // messages = () => this.db.ref('messages');
+  sessions = () => this.db.ref('sessions');
 }
 
 export default Firebase;

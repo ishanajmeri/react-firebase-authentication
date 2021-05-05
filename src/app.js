@@ -4,22 +4,53 @@ import Routes from './routes/Routes';
 
 const App = props => {
   const { firebase } = props;
-  // React.useEffect(() => {
-  let exp;
-  if (typeof window !== 'undefined') {
-    exp = window.localStorage.getItem('exp');
+  function getToken() {
+    let time = false;
+    if (firebase.auth.currentUser) {
+      console.log(firebase);
+      const uid = firebase.auth.currentUser.uid;
+      firebase
+        .sessions()
+        .orderByChild('userId')
+        .equalTo(uid)
+        .limitToLast(1)
+        .on('value', snapshot => {
+          const sessionObject = snapshot.val();
+          try {
+            const session = Object.keys(sessionObject).map(key => ({
+              ...sessionObject[key],
+            }));
+            // console.log(session[0].timeIn);
+            time = session[0].timeIn;
+          } catch (err) {
+            throw new Error(err);
+          }
+        });
+    }
+    return time;
   }
-  console.log('exp', exp);
-  //   // if (exp > new Date()) console.log('expired');
-  if (exp) {
-    setTimeout(() => {
-      firebase.doSignOut();
-      console.log('time');
-      window.localStorage.removeItem('exp');
-    }, exp);
-  }
+  let time = getToken();
 
-  // });
+  let timerId = setInterval(() => {
+    if (!time) {
+      time = getToken();
+      console.log('time', time + 60000 * 2 <= new Date().getTime(), time, new Date().getTime());
+      if (time + 60000 * 2 <= new Date().getTime()) {
+        console.log('time1');
+        firebase.doSignOut();
+        clearInterval(timerId);
+      }
+    }
+  }, 10000);
+
+  // if (exp) {
+  //   setTimeout(() => {
+  //     firebase.doSignOut();
+  //     console.log('time');
+  //     window.localStorage.removeItem('exp');
+  //   }, exp);
+  // }
+
   return (
     <div>
       <Routes />
