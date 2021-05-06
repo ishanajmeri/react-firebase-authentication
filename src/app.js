@@ -16,11 +16,14 @@ const App = props => {
         .limitToLast(1)
         .on('value', snapshot => {
           const sessionObject = snapshot.val();
+          if (!sessionObject) return false;
+          console.log(sessionObject, 'sessionObject');
           try {
             const session = Object.keys(sessionObject).map(key => ({
               ...sessionObject[key],
             }));
             // console.log(session[0].timeIn);
+            console.log(session, 'session');
             time = session[0].timeIn;
           } catch (err) {
             throw new Error(err);
@@ -34,8 +37,8 @@ const App = props => {
   let timerId = setInterval(() => {
     if (!time) {
       time = getToken();
-      console.log('time', time + 60000 * 2 <= new Date().getTime(), time, new Date().getTime());
-      if (time + 60000 * 2 <= new Date().getTime()) {
+      console.log('time', time + 6000 * 2 <= new Date().getTime(), time, new Date().getTime());
+      if (time + 6000 * 2 <= new Date().getTime()) {
         console.log('time1');
         firebase.doSignOut();
         clearInterval(timerId);
