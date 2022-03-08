@@ -18,6 +18,7 @@ const SignUp = props => {
   const [error, setError] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const handleFinish = values => {
+    console.log(values);
     const { username, email, password, isAdmin } = values;
     const roles = {};
     if (isAdmin !== undefined) {
@@ -30,7 +31,7 @@ const SignUp = props => {
         return props.firebase.user(authUser.user.uid).set({
           username,
           email,
-          roles,
+          roles
         });
       })
       .then(() => {
@@ -79,8 +80,8 @@ const SignUp = props => {
                         rules={[
                           {
                             required: true,
-                            message: 'Please input your Username!',
-                          },
+                            message: 'Please input your Username!'
+                          }
                         ]}
                       >
                         <Input prefix={<UserOutlined />} placeholder="Username" />
@@ -90,12 +91,12 @@ const SignUp = props => {
                         rules={[
                           {
                             type: 'email',
-                            message: 'The input is not valid E-mail!',
+                            message: 'The input is not valid E-mail!'
                           },
                           {
                             required: true,
-                            message: 'Please input your E-mail!',
-                          },
+                            message: 'Please input your E-mail!'
+                          }
                         ]}
                       >
                         <Input prefix={<MailOutlined />} placeholder="E-mail" />
@@ -106,9 +107,9 @@ const SignUp = props => {
                         rules={[
                           {
                             required: true,
-                            message: 'Please input your password!',
+                            message: 'Please input your password!'
                           },
-                          { min: 6, message: 'At least has 6 letters.' },
+                          { min: 6, message: 'At least has 6 letters.' }
                         ]}
                         hasFeedback
                       >
@@ -122,7 +123,7 @@ const SignUp = props => {
                         rules={[
                           {
                             required: true,
-                            message: 'Please confirm your password!',
+                            message: 'Please confirm your password!'
                           },
                           { min: 6, message: 'At least has 6 letters.' },
                           ({ getFieldValue }) => ({
@@ -131,8 +132,8 @@ const SignUp = props => {
                                 return Promise.resolve();
                               }
                               return Promise.reject('The two passwords that you entered do not match!');
-                            },
-                          }),
+                            }
+                          })
                         ]}
                       >
                         <Input.Password prefix={<LockOutlined />} placeholder="Confirm password" />

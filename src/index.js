@@ -8,11 +8,11 @@ import { BrowserRouter } from 'react-router-dom';
 import 'antd/dist/antd.css';
 
 ReactDOM.render(
-  <FirebaseContext.Provider value={new Firebase()}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </FirebaseContext.Provider>,
+  // <FirebaseContext.Provider value={new Firebase()}>
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  // </FirebaseContext.Provider>,
   document.getElementById('root')
 );
 
